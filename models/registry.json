@@ -1,0 +1,192 @@
+{
+  "demand": {
+    "task": "Monthly product units",
+    "model": "Seasonal naive",
+    "version": "1.0",
+    "training_period": [
+      "2023-10-01",
+      "2026-09-01"
+    ],
+    "features": [
+      "historical monthly units"
+    ],
+    "validation": "Three expanding 3-month recursive folds; separate final 3-month test",
+    "test_metrics": {
+      "MAE": 238.80790960451978,
+      "RMSE": 353.1693868658622,
+      "WAPE": 0.26781686392782017,
+      "MAPE": 0.347351874771401,
+      "Bias": -0.03968243911093089
+    },
+    "interval_method": "90% horizon-specific empirical absolute development residuals; marginal, not guaranteed conditional coverage",
+    "test_interval_coverage": 0.8248587570621468,
+    "trained_at": "2026-10-08T11:15:09.979048+00:00",
+    "granularity": "product \u00d7 month; 59 products, 36 months",
+    "observed_sales_not_unconstrained_demand": true
+  },
+  "stockout": {
+    "Precision": 0.3582089552238806,
+    "Recall": 0.8888888888888888,
+    "F1": 0.5106382978723404,
+    "ROC_AUC": 0.9654614932392711,
+    "PR_AUC": 0.5257037546588565,
+    "Brier": 0.03260109142329932,
+    "positives": 27,
+    "rows": 531,
+    "threshold": 0.06,
+    "validation": {
+      "Precision": 0.47674418604651164,
+      "Recall": 0.9111111111111111,
+      "F1": 0.6259541984732825,
+      "ROC_AUC": 0.9792090025128373,
+      "PR_AUC": 0.6367614750138477,
+      "Brier": 0.021772893386305062,
+      "positives": 45,
+      "rows": 1062,
+      "threshold": 0.06
+    },
+    "task": "Any reported stockout next month",
+    "model": "Random Forest + sigmoid calibration",
+    "features": [
+      "Closing_Stock",
+      "Avg_Daily_Sales_90D",
+      "Supplier_Lead_Time_Days",
+      "Damaged_Qty",
+      "Returned_Qty",
+      "Sold_Qty",
+      "month",
+      "lag_stockout",
+      "stock_cover_calc"
+    ],
+    "training_end": "2025-11-01",
+    "calibration_period": [
+      "2025-12-01",
+      "2026-05-01"
+    ],
+    "test_period": [
+      "2026-06-01",
+      "2026-08-01"
+    ],
+    "feature_importance": {
+      "Closing_Stock": 0.2760230387481935,
+      "Avg_Daily_Sales_90D": 0.10344393860951594,
+      "Supplier_Lead_Time_Days": 0.0009300293354349337,
+      "Damaged_Qty": 0.016066049788634462,
+      "Returned_Qty": 0.0027078146365160025,
+      "Sold_Qty": 0.09642009205182124,
+      "month": 0.0019990078673123267,
+      "lag_stockout": 0.0497476503984649,
+      "stock_cover_calc": 0.4526623785641067
+    },
+    "status": "Validated on training dataset"
+  },
+  "customers": {
+    "Precision": 0.9344262295081968,
+    "Recall": 0.14489990467111535,
+    "F1": 0.25089408528198076,
+    "ROC_AUC": 0.5689407319610174,
+    "PR_AUC": 0.5627258853494728,
+    "Brier": 0.22715972318116281,
+    "positives": 9441,
+    "rows": 21942,
+    "threshold": 0.5,
+    "prevalence_baseline_PR_AUC": 0.4302707136997539,
+    "status": "Exploratory \u2014 modest discrimination",
+    "feature_importance": {
+      "recency": 0.006323716815205333,
+      "frequency": 0.058510152318867706,
+      "monetary": 0.20781064133966692,
+      "units": 0.3099865616347625,
+      "aov": 0.41736892789149743
+    },
+    "task": "Repeat purchase within 90 days",
+    "model": "Random Forest",
+    "features": [
+      "recency",
+      "frequency",
+      "monetary",
+      "units",
+      "aov"
+    ],
+    "test_cutoff": "2026-07-02",
+    "limitation": "Repeated customers across chronological snapshots; temporal generalization only, not unseen-customer generalization"
+  },
+  "segments": {
+    "model": "KMeans",
+    "k": 2,
+    "silhouette": 0.5303576990997767,
+    "features": [
+      "Revenue",
+      "Units90",
+      "Price",
+      "Volatility",
+      "Expected_Growth"
+    ]
+  },
+  "anomaly": {
+    "model": "Isolation Forest",
+    "training_end": "2025-11-13",
+    "features": [
+      "Units",
+      "Revenue",
+      "Orders",
+      "Weekday",
+      "Month",
+      "Deviation"
+    ],
+    "limitation": "Unsupervised anomaly flags; no labeled accuracy claim; training-period flags are retrospective",
+    "scope_models": 20,
+    "scope_policy": "Distinct offline model per company/branch/category combination; UI selects existing scope model and historical dates."
+  },
+  "price": {
+    "MAE": 75.47745349052235,
+    "RMSE": 115.01764042419995,
+    "WAPE": 0.3545843922288678,
+    "MAPE": 2.105058597736913,
+    "Bias": -0.1279400314888244,
+    "task": "Complete-calendar-week product units under observed price/discount associations",
+    "model": "Histogram gradient boosting",
+    "baseline_WAPE": 0.5656530184979558,
+    "interval_coverage": 0.8782234957020058,
+    "interval_method": "Calibration-period absolute residual 90% marginal band; production refit may alter coverage",
+    "status": "Exploratory association; no causal price response",
+    "training_rows": 6375,
+    "calibration_rows": 1354,
+    "test_rows": 1396,
+    "date_basis": "Complete Monday\u2013Sunday weeks only",
+    "limitation": "Only weeks with recorded product sales and observed discounts are modeled; discount treatment in zero-sale weeks is unknown. No monthly scaling. Model-price signals are exploratory."
+  },
+  "source_hashes": {
+    "Printing_Batches.csv": "b4966dfb90166d8dc31dbf55811ff55305f24d5f5fe718e60eb4888da82dfd94",
+    "Suppliers.csv": "dca6f9ced4bc97408c8b31e06e665a3167026ff9580f615aa8544f58e8f85e8e",
+    "Data_Dictionary(1).csv": "b2e51e468b2dc81b5f7b3611846bd0eda38d97b20e3800c0e0ea92c1600cdfda",
+    "Web_Traffic_Daily.csv": "eda6bd4361e5f10aacb8d018ab9a83199fa38f6a7fc141eb702e06ab25266d04",
+    "Product_Master.csv": "40528fda926d393757e2f8b29e0547fb24b6650c721708949c1da2b301d93442",
+    "Marketing.csv": "1a6128c7d4e2a36521f5ec892dfda93544ab387fce8d4173ff51e45b591f602d",
+    "Quality.csv": "621b05807ebd70ea31f3bdfa39bc6fff064147dc81872ff9b2df8cf6329368cc",
+    "Purchase_Orders.csv": "3750385bc27fee687671831ab5b79cfc31fc29d5002f21b3b207ec1a8a7e2db6",
+    "Machine_Downtime.csv": "8c41d742e667ee55e0729256736a8c1e2671d0e0ee833af4df34c3afa95e71f1",
+    "Business_Units(1).csv": "1ae6175de1ef2586d215fcf05db2f5007e758a38281310fc393a6496267168db",
+    "Case_Briefs(1).csv": "3354f198c815d88405b7438da7c73e976c36f91c29865a2b9d4be87f759dbdc3",
+    "Group_Operations(1).csv": "5d80c3aa2d9ce2f801f3834b12a1ed2dbb4b58261c839b49428c8656a479ea4e",
+    "Inventory_History(1).csv": "6a241c9d4610e440b74e1cfd6d185e1a75efed659cef2e94335d158c5a11fb49",
+    "Customers(1).csv": "3a8e0bd383234a5f284f98e68e710fd1e8dc5d5c46f76102a6e512cce6cd6aac",
+    "Production_Orders.csv": "6d7c188f78834dcb9191a9a7071ab2fea72cceea99fe4776d6d620d236266c44",
+    "Product_BOM.csv": "534f3d8397d872b254f4c1af1cec56f958addd8688cef50fcaabfdc9cbc7106d",
+    "Materials.csv": "683e244ddcc0c3abd3ef6908fcd84a569590fef1f0f0ffec57c5ce9bd4a58777",
+    "Locations.csv": "a716b5d3a01a79b9af1a2ea3769b0e1c4cb14ae7b698bf6469444f5ca5a68c82",
+    "Sales_Transactions.csv": "ba57ba25b4a464cee74420c82ef54cd281194a9a89440389a1349305494f1e20",
+    "Customer_Service(1).csv": "abda9f7eaacf295fa540ab6a865e479df3fe5e61a9d1e4a2dbecb3fb49864d07"
+  },
+  "release": "5.0 connected workspaces, live report and English copilot",
+  "profit_outlook": {
+    "task": "Three-month contribution proxy from heldout demand and frozen historical financial rates",
+    "MAE": 57192.92218386452,
+    "RMSE": 58737.8030672896,
+    "WAPE": 0.034294533704767045,
+    "Bias": -57192.92218386452,
+    "Months": 3,
+    "Rate_Cutoff": "2026-06-30",
+    "Limitation": "Only three aggregate months; expenses and real COGS unavailable. Not validated net profit or calibrated annual interval."
+  }
+}

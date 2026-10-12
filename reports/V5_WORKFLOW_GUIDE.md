@@ -1,0 +1,13 @@
+# Connected workflow guide — Release 5
+
+Start at Business Overview. Inspect prioritized actions, then choose Sales & Products for product performance and forecasts. Product selection is carried into linked forecasting and weekly scenarios by Continue buttons. Inventory & Operations combines audited stock, production allocation, weekly scenarios and operational reports. Finance & Reports combines the live report, conditional year-end estimate, annual closing and physical counts. Data/model audits are grouped in Settings & Trust.
+
+Live Business Report shares price, cost, fulfillment, target and future-expense inputs with Year-End Profit. Inputs update financial scenarios, calculation details, break-even and download contents immediately. Production inputs from the last matching-scope Planner session are also used, or documented defaults. These planning costs are kept separate from estimated sold COGS to prevent double expense recognition. A selected historical date window changes recorded-period metrics; it does not backdate trained forecasts or source-year financial assumptions.
+
+Report pack contains full CSVs for historical KPIs, annual YTD calculation, all profit scenarios and month/product calculations, price/cost/refund assumptions, target/break-even, margins, demand forecasts, inventory, production plan, product intelligence, anomaly flags, invoices, refund events and expenses. The readable HTML previews 200 rows per table with full scope/assumptions. Empty sections have explicit messages. No credentials are exported.
+
+AI Copilot is English-only. Source Arabic text is omitted in the chat display while IDs remain available. Arabic UI prompts and suggestions have been removed; non-English user input is rejected in the interface. Provider setup supports session use or local .env saving with password entry, a basic connection test, and safe diagnostics. An actual working API key, compatible model ID and endpoint are necessary for live LLM interaction. Credentials were not provided for live provider-account testing; simulated provider tests cover the adapter/error behavior. Numeric tables are still derived from local tools. Qualitative model prose that fails English/numeric checks is omitted with an explicit reason.
+
+September 2026 All/All anomaly scope contains 30 evaluated days with zero flags. This is a valid evaluated result, not a missing model. The UI distinguishes unavailable scope, no evaluated dates (including warm-up) and no flagged days; Show all evaluated days enables inspection. No thresholds were changed to invent alerts.
+
+Upgrade preserves expense/count/alert records and copies an old .env only when the new release has none. Existing credentials are not overwritten. Stop the old app before migrating.
